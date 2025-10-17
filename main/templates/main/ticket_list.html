@@ -1,0 +1,51 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Поиск билетов</title>
+</head>
+<body>
+    <h1>Поиск билетов</h1>
+
+    <form method="get">
+        <label>Откуда:</label>
+        <select name="from">
+            <option value="">Выберите город</option>
+            {% for city in cities %}
+                <option value="{{ city.id }}" {% if city.id|stringformat:"s" == selected_from %}selected{% endif %}>
+                    {{ city.name }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <label>Куда:</label>
+        <select name="to">
+            <option value="">Выберите город</option>
+            {% for city in cities %}
+                <option value="{{ city.id }}" {% if city.id|stringformat:"s" == selected_to %}selected{% endif %}>
+                    {{ city.name }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Найти</button>
+    </form>
+
+    <hr>
+
+    {% if tickets %}
+        <ul>
+            {% for ticket in tickets %}
+                <li>
+                    {{ ticket.route.departure }} → {{ ticket.route.destination }} |
+                    {{ ticket.company_name }} |
+                    {{ ticket.departure_time|date:"H:i d.m.Y" }} → {{ ticket.arrival_time|date:"H:i d.m.Y" }} |
+                    Цена: {{ ticket.price }} ₽
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Билеты не найдены.</p>
+    {% endif %}
+</body>
+</html>
